@@ -5,7 +5,7 @@ namespace Provisioner.Service.Provisioning.Manifests;
 public static class AppManifests
 {
     // TODO: (SECURITY) Make more secure by possibly hashing and atleased adding customerId to the secret name
-    public static string SecretName(string appName) => $"{appName}-secrets"; 
+    public static string SecretName(string appName) => $"{appName}-secrets";
 
     private static Dictionary<string, string> Labels(string appName) => new() { ["app"] = appName };
 
@@ -42,6 +42,17 @@ public static class AppManifests
                     Metadata = new V1ObjectMeta { Labels = Labels(appName) },
                     Spec = new V1PodSpec
                     {
+                        NodeSelector = new Dictionary<string, string> { ["pool"] = "customer" },
+                        Tolerations =
+                        [
+                            new V1Toleration
+                            {
+                                Key = "pool",
+                                OperatorProperty = "Equal",
+                                Value = "customer",
+                                Effect = "NoSchedule"
+                            }
+                        ],
                         Containers =
                         [
                             new V1Container

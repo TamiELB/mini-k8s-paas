@@ -8,8 +8,10 @@ public record AppRequested(
     ServiceRequest? Service = null,
     IngressRequest? Ingress = null);
 
+public sealed class EnvVariables : Dictionary<string, string>;
+
 public record WorkloadRequest(string Image, int Replicas = 1, IReadOnlyDictionary<string, string>? Env = null,
-    IReadOnlyDictionary<string, string>? Secrets = null);
+    EnvVariables? Secrets = null);
 
 public record ServiceRequest(int Port, int? TargetPort = null);
 
