@@ -1,0 +1,23 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: paas
+servers: 1
+agents: 2
+ports:
+  - port: 127.0.0.1:8080:80
+    nodeFilters:
+      - loadbalancer
+options:
+  k3s:
+    extraArgs:
+      - arg: --node-taint=pool=customer:NoSchedule
+        nodeFilters:
+          - agent:1
+    nodeLabels:
+      - label: pool=platform
+        nodeFilters:
+          - agent:0
+      - label: pool=customer
+        nodeFilters:
+          - agent:1
