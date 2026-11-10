@@ -1,0 +1,7 @@
+{
+    "customerId": "acme",
+    "appName": "whoami",
+    "workload": { "image": "traefik/whoami", "replicas": 2 },
+    "service": { "port": 80 },
+    "ingress": {}
+}

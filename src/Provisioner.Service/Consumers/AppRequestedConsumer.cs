@@ -31,6 +31,21 @@ public class AppRequestedConsumer(IKubernetesProvisioner provisioner, ILogger<Ap
 
         logger.LogInformation("Provisioning {App} for customer {Customer}", spec.AppName, spec.CustomerId);
 
-        await provisioner.EnsureAppAsync(spec, context.CancellationToken);
+        ProvisioningResult result;
+        try
+        {
+            result = await provisioner.EnsureAppAsync(spec, context.CancellationToken);
+        }
+        catch (TimeoutException e)
+        {
+            logger.LogWarning("App {AppId} not ready: {Reason}", msg.AppId, e.Message);
+            await context.Publish(new ProvisioningFailed(msg.AppId, e.Message));
+            return;
+        }
+
+
+        logger.LogInformation("Provisioned {App} for customer {Customer} with URL {Url} and internal address {InternalAddress}",
+            spec.AppName, spec.CustomerId, result.Url, result.InternalAddress);
+        await context.Publish(new AppProvisioned(msg.AppId, result.Url, result.InternalAddress));
     }
 }

@@ -8,10 +8,10 @@ public record AppRequested(
     ServiceRequest? Service = null,
     IngressRequest? Ingress = null);
 
-public sealed class EnvVariables : Dictionary<string, string>;
+// TODO: (SECURITY) Design proper flow since secrets should not be send in event and as plain text.
 
 public record WorkloadRequest(string Image, int Replicas = 1, IReadOnlyDictionary<string, string>? Env = null,
-    EnvVariables? Secrets = null);
+    IReadOnlyDictionary<string, string>? Secrets = null);
 
 public record ServiceRequest(int Port, int? TargetPort = null);
 

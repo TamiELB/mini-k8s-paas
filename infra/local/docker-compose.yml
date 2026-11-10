@@ -3,4 +3,11 @@ services:
     image: rabbitmq:4-management
     ports:
       - "127.0.0.1:5672:5672"
-      - "127.0.0.1:15672:15672"
+      - "127.0.0.1:15672:15672"  # WEBUI
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: portal
+      POSTGRES_PASSWORD: dev
+    ports:
+      - "127.0.0.1:5433:5432"

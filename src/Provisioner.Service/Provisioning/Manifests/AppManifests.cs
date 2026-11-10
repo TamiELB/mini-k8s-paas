@@ -9,10 +9,10 @@ public static class AppManifests
 
     private static Dictionary<string, string> Labels(string appName) => new() { ["app"] = appName };
 
-    public static V1Secret Secret(string appName, WorkloadSpec workload) => new()
+    public static V1Secret Secret(string appName, IReadOnlyDictionary<string, string> secrets) => new()
     {
         Metadata = new V1ObjectMeta { Name = SecretName(appName) },
-        StringData = workload.Secrets.ToDictionary()
+        StringData = secrets.ToDictionary()
     };
 
     public static V1Deployment Deployment(string appName, WorkloadSpec workload)

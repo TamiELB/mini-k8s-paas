@@ -1,5 +1,5 @@
 namespace Provisioner.Service.Provisioning;
 public interface IKubernetesProvisioner
             {
-    Task EnsureAppAsync(AppSpec appSpec, CancellationToken ct);
+    Task<ProvisioningResult> EnsureAppAsync(AppSpec appSpec, CancellationToken ct);
 }
